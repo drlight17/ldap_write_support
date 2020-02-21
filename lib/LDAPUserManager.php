@@ -337,7 +337,8 @@ class LDAPUserManager implements ILDAPUserPlugin {
 	 * Change the password of a user
 	 */
 	public function setPassword($uid, $password) {
-		if(!function_exists('ldap_exop_passwd')) {
+		//if(!function_exists('ldap_exop_passwd')) {
+		if(!function_exists('ldap_modify')) {
 			// since PHP 7.2 – respondToActions checked this already, this
 			// method should not be called. Double check due to public scope.
 			// This method can be removed when Nextcloud 16 compat is dropped.
@@ -346,7 +347,10 @@ class LDAPUserManager implements ILDAPUserPlugin {
 		try {
 			$cr = $this->ldapProvider->getLDAPConnection($uid);
 			$userDN = $this->getUserDN($uid);
-			return ldap_exop_passwd($cr, $userDN, '', $password);
+			// samoilov 22.02.2020 to reset password using native unicodePwd attr instead of ldap userPassword
+                        $entry["unicodePwd"] = iconv("UTF-8", "UTF-16LE", '"' . $password . '"');
+                        return ldap_modify($cr,$userDN,$entry);
+			//return ldap_exop_passwd($cr, $userDN, '', $password);
 		} catch (\Exception $e) {
 			$this->logger->logException($e, ['app' => Application::APP_ID]);
 		}
