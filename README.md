@@ -34,3 +34,5 @@ git apply -p1 < /path/to/ldap_write_support-v16.0.1.patch
 2. 👩‍💻 In the folder of the app, run the command `npm i` to install dependencies and `npm run build` to build the Javascript
 3. ✅ Enable the app through the app management of your Nextcloud
 4. 🎉 Partytime! Help fix [some issues](https://github.com/nextcloud/ldap_write_support/issues) and [review pull requests](https://github.com/nextcloud/ldap_write_support/pulls) 👍
+
+drlight17: resetting password using native unicodePwd attr instead of ldap userPassword attr. see LDAPUserManager.php
